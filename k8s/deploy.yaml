@@ -1,0 +1,76 @@
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: retail-app
+  labels:
+    name: retail-app
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: retail-app-config
+  namespace: retail-app
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retail-app
+  namespace: retail-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: retail-app
+  template:
+    metadata:
+      labels:
+        app: retail-app
+    spec:
+      containers:
+      - name: retail-app
+        image: YOUR_DOCKERHUB_USERNAME/retail-app:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: retail-app-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: retail-app-service
+  namespace: retail-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: retail-app
+  ports:
+  - port: 80
+    targetPort: 3000

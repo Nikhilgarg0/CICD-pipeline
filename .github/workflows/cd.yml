@@ -77,6 +77,49 @@ jobs:
       #     kubectl set image deployment/retail-app retail-app=${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:${{ github.sha }}
       #     kubectl rollout status deployment/retail-app
 
+  deploy-k8s:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+      
+      # Uncomment when you have K8s cluster configured
+      # - name: Configure kubectl
+      #   run: |
+      #     echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
+      #     export KUBECONFIG=kubeconfig
+      
+      # - name: Update deployment image
+      #   run: |
+      #     kubectl set image deployment/retail-app \
+      #       retail-app=${{ secrets.DOCKER_USERNAME }}/retail-app:${{ github.sha }} \
+      #       -n retail-app
+      
+      # - name: Wait for rollout
+      #   run: |
+      #     kubectl rollout status deployment/retail-app -n retail-app
+      
+      # - name: Verify deployment
+      #   run: |
+      #     kubectl get pods -n retail-app
+      #     kubectl get svc -n retail-app
+      
+      - name: Deployment info
+        run: |
+          echo "📦 K8s manifests ready in k8s/ directory"
+          echo "🔧 Update deployment.yaml with your Docker Hub username"
+          echo "☸️  Deploy with: kubectl apply -f k8s/deploy.yaml"
+
+
   notify:
     name: Notify Deployment Status
     runs-on: ubuntu-latest
