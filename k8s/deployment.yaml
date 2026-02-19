@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: retail-app
-        image: YOUR_DOCKERHUB_USERNAME/retail-app:latest
+        image: nikhilgarg0/retail-app:latest
         imagePullPolicy: Always
         ports:
         - name: http

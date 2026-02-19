@@ -18,7 +18,7 @@
 7. [Sequence Diagrams](#sequence-diagrams)
 8. [Error Handling](#error-handling)
 9. [Security Design](#security-design)
-10. [Testing Strategy](#testing-strategy)
+10.[Testing Strategy](#testing-strategy)
 
 ---
 
