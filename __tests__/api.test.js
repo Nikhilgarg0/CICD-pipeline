@@ -15,9 +15,19 @@ describe('API Integration Tests', () => {
   });
 
   describe('Root Endpoint', () => {
-    test('GET / should return API information', async () => {
+    test('GET / should serve the frontend dashboard', async () => {
       const response = await request(app)
         .get('/')
+        .expect(200);
+
+      // Root now serves the HTML frontend
+      expect(response.headers['content-type']).toMatch(/html/);
+      expect(response.text).toContain('RetailOps');
+    });
+
+    test('GET /api/info should return API information', async () => {
+      const response = await request(app)
+        .get('/api/info')
         .expect(200);
 
       expect(response.body).toHaveProperty('message');

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetailOps — Dashboard</title>
+  <meta name="description" content="RetailOps: A modern retail management dashboard for products, orders and real-time analytics." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <!-- Background orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </div>
+      <span class="logo-text">RetailOps</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-page="products" id="nav-products">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        <span>Products</span>
+        <span class="nav-badge" id="products-count-badge">0</span>
+      </a>
+      <a href="#" class="nav-item" data-page="orders" id="nav-orders">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 20H6a2 2 0 01-2-2V9a2 2 0 012-2h3"/><path d="M15 4H18a2 2 0 012 2v14a2 2 0 01-2 2h-3"/>
+          <polyline points="9 12 12 15 15 12"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <span>Orders</span>
+        <span class="nav-badge" id="orders-count-badge">0</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="health-indicator" id="health-indicator">
+        <span class="health-dot" id="health-dot"></span>
+        <span class="health-text" id="health-text">Checking...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile toggle -->
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Main content -->
+  <main class="main-content" id="main-content">
+
+    <!-- ═══════════════ DASHBOARD PAGE ═══════════════ -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Welcome back — here's what's happening today</p>
+        </div>
+        <button class="btn btn-primary" id="refresh-dashboard-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
+          Refresh
+        </button>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="stats-grid">
+        <div class="stat-card" id="stat-total-products">
+          <div class="stat-icon stat-icon-purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Total Products</p>
+            <p class="stat-value" id="stat-products-val">—</p>
+          </div>
+        </div>
+
+        <div class="stat-card" id="stat-total-orders">
+          <div class="stat-icon stat-icon-blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Total Orders</p>
+            <p class="stat-value" id="stat-orders-val">—</p>
+          </div>
+        </div>
+
+        <div class="stat-card" id="stat-revenue">
+          <div class="stat-icon stat-icon-green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Total Revenue</p>
+            <p class="stat-value" id="stat-revenue-val">—</p>
+          </div>
+        </div>
+
+        <div class="stat-card" id="stat-pending">
+          <div class="stat-icon stat-icon-amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Pending Orders</p>
+            <p class="stat-value" id="stat-pending-val">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order status breakdown + Recent orders -->
+      <div class="dashboard-grid">
+        <div class="glass-card">
+          <h2 class="card-title">Orders by Status</h2>
+          <div id="status-breakdown" class="status-breakdown">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h2 class="card-title">Top Products</h2>
+          <div id="top-products-list" class="top-list">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PRODUCTS PAGE ═══════════════ -->
+    <section class="page" id="page-products">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Products</h1>
+          <p class="page-subtitle">Manage your product inventory</p>
+        </div>
+        <button class="btn btn-primary" id="add-product-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Product
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar glass-card">
+        <div class="filter-group">
+          <label class="filter-label">Category</label>
+          <select class="filter-select" id="product-category-filter">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Min Price</label>
+          <input type="number" class="filter-input" id="product-min-price" placeholder="$0" min="0" />
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Max Price</label>
+          <input type="number" class="filter-input" id="product-max-price" placeholder="Any" min="0" />
+        </div>
+        <button class="btn btn-ghost" id="clear-product-filters">Clear</button>
+      </div>
+
+      <!-- Products table -->
+      <div class="glass-card table-card">
+        <div class="table-wrapper">
+          <table class="data-table" id="products-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody">
+              <tr><td colspan="5" class="table-loading">Loading products...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ ORDERS PAGE ═══════════════ -->
+    <section class="page" id="page-orders">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Orders</h1>
+          <p class="page-subtitle">Track and manage customer orders</p>
+        </div>
+        <button class="btn btn-primary" id="create-order-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          New Order
+        </button>
+      </div>
+
+      <!-- Order filters -->
+      <div class="filter-bar glass-card">
+        <div class="filter-group">
+          <label class="filter-label">Status</label>
+          <select class="filter-select" id="order-status-filter">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Customer Email</label>
+          <input type="email" class="filter-input" id="order-email-filter" placeholder="Search by email" />
+        </div>
+        <button class="btn btn-ghost" id="clear-order-filters">Clear</button>
+      </div>
+
+      <!-- Orders table -->
+      <div class="glass-card table-card">
+        <div class="table-wrapper">
+          <table class="data-table" id="orders-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody">
+              <tr><td colspan="7" class="table-loading">Loading orders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════ MODALS ══════════ -->
+
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="product-modal-overlay">
+    <div class="modal" id="product-modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="product-modal-title">Add Product</h2>
+        <button class="modal-close" id="product-modal-close" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="product-form" class="modal-form" novalidate>
+        <input type="hidden" id="product-id" />
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="product-name">Product Name <span class="required">*</span></label>
+            <input class="form-input" id="product-name" type="text" placeholder="e.g. Wireless Keyboard" required />
+            <span class="form-error" id="product-name-error"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="product-category">Category</label>
+            <input class="form-input" id="product-category" type="text" placeholder="e.g. Electronics" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="product-description">Description</label>
+          <textarea class="form-input form-textarea" id="product-description" placeholder="Short description..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="product-price">Price ($) <span class="required">*</span></label>
+            <input class="form-input" id="product-price" type="number" min="0.01" step="0.01" placeholder="0.00" required />
+            <span class="form-error" id="product-price-error"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="product-stock">Stock <span class="required">*</span></label>
+            <input class="form-input" id="product-stock" type="number" min="0" step="1" placeholder="0" required />
+            <span class="form-error" id="product-stock-error"></span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="product-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="product-submit-btn">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Modal -->
+  <div class="modal-overlay" id="order-modal-overlay">
+    <div class="modal modal-lg" id="order-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Order</h2>
+        <button class="modal-close" id="order-modal-close" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="order-form" class="modal-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="order-customer-name">Customer Name <span class="required">*</span></label>
+            <input class="form-input" id="order-customer-name" type="text" placeholder="John Doe" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="order-customer-email">Customer Email <span class="required">*</span></label>
+            <input class="form-input" id="order-customer-email" type="email" placeholder="john@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Order Items <span class="required">*</span></label>
+          <div id="order-items-list"></div>
+          <button type="button" class="btn btn-ghost btn-sm mt-8" id="add-order-item-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Item
+          </button>
+        </div>
+
+        <div class="order-total-preview" id="order-total-preview" style="display:none;">
+          <span>Estimated Total:</span>
+          <strong id="order-total-amount">$0.00</strong>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="order-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="order-submit-btn">Place Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="modal-overlay" id="order-detail-overlay">
+    <div class="modal modal-lg" id="order-detail-modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="order-detail-title">Order Details</h2>
+        <button class="modal-close" id="order-detail-close" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div id="order-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Confirm Dialog -->
+  <div class="modal-overlay" id="confirm-overlay">
+    <div class="modal modal-sm" id="confirm-modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="confirm-title">Confirm Action</h2>
+      </div>
+      <p class="confirm-message" id="confirm-message"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="confirm-cancel-btn">Cancel</button>
+        <button class="btn btn-danger" id="confirm-ok-btn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

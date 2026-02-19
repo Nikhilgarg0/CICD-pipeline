@@ -8,25 +8,31 @@
     "dev": "nodemon src/server.js",
     "test": "jest --coverage --detectOpenHandles",
     "test:watch": "jest --watch",
-    "lint": "eslint src/**/*.js",
+    "lint": "eslint \"src/**/*.js\"",
     "docker:build": "docker build -t retail-app:latest .",
     "docker:run": "docker run -p 3000:3000 retail-app:latest"
   },
-  "keywords": ["retail", "nodejs", "api", "cicd"],
+  "keywords": [
+    "retail",
+    "nodejs",
+    "api",
+    "cicd"
+  ],
   "author": "DevOps Team",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
     "cors": "^2.8.5",
-    "helmet": "^7.1.0",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "supertest": "^6.3.3",
-    "nodemon": "^3.0.2",
-    "eslint": "^8.55.0"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^6.3.3"
   },
   "jest": {
     "testEnvironment": "node",
@@ -35,6 +41,8 @@
       "src/**/*.js",
       "!src/server.js"
     ],
-    "testMatch": ["**/__tests__/**/*.test.js"]
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ]
   }
 }

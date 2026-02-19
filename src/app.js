@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -7,10 +8,13 @@ const orderRoutes = require('./routes/orderRoutes');
 const app = express();
 
 // Middleware
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -32,8 +36,8 @@ app.get('/health', (req, res) => {
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
-// Root endpoint
-app.get('/', (req, res) => {
+// API info endpoint
+app.get('/api/info', (req, res) => {
   res.json({
     message: 'Welcome to Retail App API',
     version: '1.0.0',
@@ -43,6 +47,11 @@ app.get('/', (req, res) => {
       orders: '/api/orders'
     }
   });
+});
+
+// Serve the frontend for the root URL
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // 404 handler
